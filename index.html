@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Musikkontroll</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header aria-live="polite">🎵 Musikkontroll v3.0</header>
+
+  <!-- LOGIN -->
+  <main id="login" class="page active" role="main" aria-labelledby="login-title" style="max-width:420px">
+    <h1 id="login-title">Logg inn</h1>
+    <div class="card">
+      <label for="email">E-post</label>
+      <input id="email" type="email" autocomplete="username" />
+      <label for="password">Passord</label>
+      <input id="password" type="password" autocomplete="current-password" />
+      <div class="row">
+        <button type="button" id="loginBtn">Logg inn</button>
+        <button type="button" class="btn-green" id="signupBtn">Opprett bruker</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn-gray" id="magicBtn">Send magisk lenke</button>
+      </div>
+      <div id="auth-status" class="help muted" aria-live="polite"></div>
+      <div id="auth-error" class="log" style="background:#fef2f2;color:#991b1b;display:none"></div>
+    </div>
+  </main>
+
+  <!-- SKJEMA -->
+  <div id="kontroll" class="page" aria-labelledby="kontroll-title">
+    <h2 id="kontroll-title" class="visually-hidden">Kontrollskjema</h2>
+    <div class="card" aria-describedby="brreg-hjelp">
+      <label for="orgnr">Org.nr</label>
+      <div class="row">
+        <input id="orgnr" inputmode="numeric" pattern="\d{9}" maxlength="9" placeholder="9 siffer" aria-describedby="brreg-hjelp" />
+        <button type="button" class="icon-btn" id="brregBtn" title="Søk i Enhetsregisteret">🔎</button>
+      </div>
+      <div id="brreg-hjelp" class="help">Søk henter navn og postadresse fra Brreg.</div>
+      <div class="row">
+        <button type="button" class="btn-gray" id="resetBtn">🗑 Nullstill skjema</button>
+        <button type="button" class="btn-gray" id="logoutBtn">Logg ut</button>
+      </div>
+      <div class="log" id="brreg-log" aria-live="polite"></div>
+    </div>
+
+    <div class="card"><label for="navn">Besøksnavn</label><input id="navn" autocomplete="organization" /></div>
+    <div class="card"><label for="besoksadresse">Adresse (besøk)</label><input id="besoksadresse" autocomplete="address-line1" /></div>
+    <div class="card">
+      <label>Post (besøk)</label>
+      <div class="row"><input id="besoks_postnr" inputmode="numeric" maxlength="4" placeholder="Postnr"><input id="besoks_poststed" placeholder="Poststed"></div>
+    </div>
+    <div class="card"><label for="firma">Firmanavn</label><input id="firma" /></div>
+    <div class="card">
+      <label>Firmaadresse (post)</label>
+      <div class="row"><input id="firma_postadresse" placeholder="Gateadresse"><input id="firma_postnr" inputmode="numeric" maxlength="4" placeholder="Postnr"><input id="firma_poststed" placeholder="Poststed"></div>
+    </div>
+
+    <div class="card">
+      <strong>Linjer</strong>
+      <div id="tariff-rows"></div>
+      <button type="button" class="btn-green" id="addRowBtn">+ Ny linje</button>
+      <label for="hoyttalere">Høyttalere</label><input id="hoyttalere">
+      <label for="kommentar">Kommentar</label><textarea id="kommentar" rows="2"></textarea>
+      <div class="row">
+        <button type="button" id="saveDraftBtn">Lagre</button>
+        <button type="button" class="btn-amber" id="printBtn">Print</button>
+        <button type="button" class="btn-green" id="sendBtn">Send PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTER -->
+  <div id="lister" class="page" aria-labelledby="lister-title">
+    <h2 id="lister-title" class="visually-hidden">Lister</h2>
+    <div class="card">
+      <label>Importer Excel</label>
+      <input type="file" id="excelFile" accept=".xlsx" />
+      <div class="help">Kolonner: Kommentar, Orgnummer, Navn, Gateadresse, Postnr, Poststed</div>
+    </div>
+    <div class="card">
+      <label for="search">Søk</label>
+      <input id="search" placeholder="Filtrer i aktive lister" />
+    </div>
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <label style="margin:0">Visning</label>
+        <button type="button" class="btn-gray" id="zoomMinus" style="width:auto;min-width:56px">−</button>
+        <span id="zoomPct" class="help" style="min-width:64px;text-align:center">100%</span>
+        <button type="button" class="btn-gray" id="zoomPlus" style="width:auto;min-width:56px">+</button>
+        <button type="button" class="btn-gray" id="zoomReset" style="width:auto;min-width:76px">Reset</button>
+      </div>
+    </div>
+    <div id="lists-viewport" class="card" style="padding:0">
+      <div id="lists-dashboard" style="padding:8px"></div>
+    </div>
+  </div>
+
+  <!-- KONTROLLERT -->
+  <div id="kontrollert" class="page" aria-labelledby="kontrollert-title">
+    <h2 id="kontrollert-title" class="visually-hidden">Kontrollert</h2>
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <label for="expMonth" style="margin:0">Eksporter måned</label>
+        <input type="month" id="expMonth" style="max-width:200px">
+        <button type="button" id="exportBtn" class="btn-amber" style="width:auto">Eksporter Excel</button>
+      </div>
+      <div class="help">Poeng: Serveringssted 350, Kundelokale 200, Fremtredende 550. TONO og GRAMO får like mange poeng.</div>
+    </div>
+    <div id="archive"></div>
+  </div>
+
+  <nav aria-label="Hovednavigasjon">
+    <button type="button" data-page="kontroll" class="active">Skjema</button>
+    <button type="button" data-page="lister">Lister</button>
+    <button type="button" data-page="kontrollert">Kontrollert</button>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <template id="tariff-row-tpl">
+    <div class="row tariff-row" data-music="Bakgrunnsmusikk" data-venue="Serveringssted">
+      <input type="number" placeholder="kvm" value="">
+      <input type="number" class="inp-seter" placeholder="sitteplasser" style="display:none" value="">
+      <input type="number" class="inp-dager" placeholder="dager/år" value="356">
+      <select class="sel-music">
+        <option>Bakgrunnsmusikk</option>
+        <option>Fremtredende musikk</option>
+      </select>
+      <select class="sel-venue">
+        <option>Serveringssted</option>
+        <option>Kundelokale</option>
+      </select>
+      <button type="button" class="icon-btn" title="Fjern">−</button>
+    </div>
+  </template>
+
+  <!-- Libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
