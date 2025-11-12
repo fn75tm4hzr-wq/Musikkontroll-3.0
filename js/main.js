@@ -3,7 +3,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { els, $, $$ } from './ui/dom.js';
 import { show } from './ui/navigation.js';
 import { toast } from './ui/toast.js';
-import { setAuthBusy, showAuthError, clearAuthError, currentUser, signOut } from './supabase/auth.js';
+import { setAuthBusy, showAuthError, clearAuthError, currentUser, signOut, loginEmailPass, signupEmailPass, magicLink } from './supabase/auth.js';
 import { searchBrreg, searchBrregDebounced } from './features/brreg.js';
 import { addRow, updateTariffDefault } from './features/tariff.js';
 import { saveControl } from './supabase/controls.js';
@@ -18,21 +18,6 @@ const { supa } = window;
 if (!supa) {
   console.error('Supabase-biblioteket ble ikke lastet.');
   alert('Fikk ikke lastet Supabase-biblioteket. Skru av "shields"/adblock eller sjekk nettverk.');
-}
-
-async function loginEmailPass(email, password) {
-  const { error } = await supa.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-}
-
-async function signupEmailPass(email, password) {
-  const { error } = await supa.auth.signUp({ email, password });
-  if (error) throw error;
-}
-
-async function magicLink(email) {
-  const { error } = await supa.auth.signInWithOtp({ email });
-  if (error) throw error;
 }
 
 function resetForm() {
@@ -59,6 +44,7 @@ els.excelFile.addEventListener('change', importExcel);
 els.logoutBtn.addEventListener('click', signOut);
 els.search.addEventListener('input', debounce(renderDashboard, 200));
 
+// --- DIN FUNGERENDE LOGIN (flyttet fra auth.js) ---
 els.loginBtn.addEventListener('click', async () => {
   clearAuthError();
   const email = (els.email.value || '').trim();
@@ -67,7 +53,7 @@ els.loginBtn.addEventListener('click', async () => {
   setAuthBusy(true); els.authStatus.textContent = 'Logger inn…';
   try {
     await loginEmailPass(email, password);
-    els.authStatus.textContent = 'Innlogget';
+    els.authStatus.textContent = 'Innlogget ✔';
     toast('Innlogget');
     show('kontroll'); updateTariffDefault(); renderDashboard(); renderArchive();
   } catch (err) {
