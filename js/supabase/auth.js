@@ -1,8 +1,10 @@
-// Alt som har med login, logout, passord og magisk lenke å gjøre
-import { supa } from '../main.js';
+// js/supabase/auth.js
 import { toast } from '../ui/toast.js';
 import { show } from '../ui/navigation.js';
 import { els } from '../ui/dom.js';
+
+// Bruk window.supa – den er allerede definert i main.js
+const { supa } = window;
 
 export function setAuthBusy(busy) {
   ['loginBtn','signupBtn','magicBtn'].forEach(id => {
