@@ -96,4 +96,37 @@
       </div>
     </div>
     <div id="lists-viewport" class="card" style="padding:0">
-      <div id="lists-das
+      <div id="lists-dashboard" style="padding:8px"></div>
+    </div>
+  </div>
+
+  <!-- KONTROLLERT -->
+  <div id="kontrollert" class="page" aria-labelledby="kontrollert-title">
+    <h2 id="kontrollert-title" class="visually-hidden">Kontrollert</h2>
+    <div class="card">
+      <div class="row" style="align-items:center">
+        <label for="expMonth" style="margin:0">Eksporter måned</label>
+        <input type="month" id="expMonth" style="max-width:200px">
+        <button type="button" id="exportBtn" class="btn-amber" style="width:auto">Eksporter Excel</button>
+      </div>
+      <div class="help">Poeng: Serveringssted 350, Kundelokale 200, Fremtredende 550. TONO og GRAMO får like mange poeng.</div>
+    </div>
+    <div id="archive"></div>
+  </div>
+
+  <nav aria-label="Hovednavigasjon">
+    <button type="button" data-page="kontroll" class="active">Skjema</button>
+    <button type="button" data-page="lister">Lister</button>
+    <button type="button" data-page="kontrollert">Kontrollert</button>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
