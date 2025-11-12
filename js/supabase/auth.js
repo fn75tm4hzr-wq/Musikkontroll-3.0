@@ -3,7 +3,7 @@ import { toast } from '../ui/toast.js';
 import { show } from '../ui/navigation.js';
 import { els } from '../ui/dom.js';
 
-// Bruk window.supa – den er allerede definert i main.js
+// Bruk window.supa – fra main.js
 const { supa } = window;
 
 export function setAuthBusy(busy) {
@@ -38,4 +38,20 @@ export async function signOut() {
   await supa.auth.signOut();
   toast('Logget ut');
   show('login');
+}
+
+// --- DIN FUNGERENDE LOGIN (fra gammel kode) ---
+export async function loginEmailPass(email, password) {
+  const { error } = await supa.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+}
+
+export async function signupEmailPass(email, password) {
+  const { error } = await supa.auth.signUp({ email, password });
+  if (error) throw error;
+}
+
+export async function magicLink(email) {
+  const { error } = await supa.auth.signInWithOtp({ email });
+  if (error) throw error;
 }
