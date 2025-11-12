@@ -1,7 +1,6 @@
-// Hovedfil – starter appen og kobler alt sammen
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { els } from './ui/dom.js';
+import { els, $, $$ } from './ui/dom.js';
 import { show } from './ui/navigation.js';
 import { toast } from './ui/toast.js';
 import { setAuthBusy, showAuthError, clearAuthError, currentUser, signOut } from './supabase/auth.js';
